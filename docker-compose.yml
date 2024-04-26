@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  go:
+    build: ./docker/go/
+    ports:
+      - 8080:8080
+    container_name: go
+    command: sh -c "go mod tidy && go install github.com/cosmtrek/air@latest && air -c .air.toml"
+    volumes:
+      - ./:/app/api/
+    networks:
+      - go-auth-template
+  mysql:
+    build: ./docker/mysql/
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: go-auth-template
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    restart: always
+    networks:
+      - go-auth-template
+networks:
+  go-auth-template:
+    driver: bridge
