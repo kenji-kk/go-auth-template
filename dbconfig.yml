@@ -1,0 +1,4 @@
+development:
+   dialect: mysql
+   datasource: user:password@tcp(127.0.0.1)/go-auth-template?charset=utf8mb4&parseTime=True&loc=Local
+   dir: ./internal/migrations/ 
