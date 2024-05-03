@@ -10,6 +10,7 @@ import (
 
 type UserRepository interface {
 	Create(context.Context, *model.User) (*model.User, error)
+	GetByEmail(ctx context.Context, email string) (*model.User, error)
 }
 
 type userRepository struct {
@@ -25,4 +26,13 @@ func (userRepository *userRepository) Create(ctx context.Context, user *model.Us
 		return nil, res.Error
 	}
 	return user, nil
+}
+
+func (userRepository *userRepository) GetByEmail(ctx context.Context, email string) (*model.User, error) {
+	var user model.User
+	err := userRepository.db.Where("email = ?", email).First(&user)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return &user, nil
 }

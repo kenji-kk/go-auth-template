@@ -14,10 +14,10 @@ func ReadRequest(ctx echo.Context, request interface{}) error {
 	return validate.StructCtx(ctx.Request().Context(), request)
 }
 
-func WriteCookie(c echo.Context, cookieName, cookievalue string, expiresTime time.Duration) error {
+func WriteCookie(c echo.Context, cookieName, cookieValue string, expiresTime time.Duration) error {
 	cookie := &http.Cookie{
 		Name:     cookieName,
-		Value:    cookievalue,
+		Value:    cookieValue,
 		Expires:  time.Now().Add(expiresTime * time.Hour),
 		HttpOnly: true,
 	}
