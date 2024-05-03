@@ -34,6 +34,7 @@ func (s *Server) MapHandler(rootHandlers *handler.RootHandlers) error {
 	s.echo.Use(middleware.Logger())
 
 	s.echo.POST("/users", rootHandlers.UserHandler.Create)
+	s.echo.POST("/login", rootHandlers.UserHandler.Login)
 
 	return nil
 }
