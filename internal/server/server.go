@@ -36,5 +36,18 @@ func (s *Server) MapHandler(rootHandlers *handler.RootHandlers) error {
 	s.echo.POST("/users", rootHandlers.UserHandler.Create)
 	s.echo.POST("/login", rootHandlers.UserHandler.Login)
 
+	// 認証が必要なルート
+	// s.echo.GET("/secure", secureEndpoint, echojwt.WithConfig(echojwt.Config{
+	// 	SigningKey:  []byte("your_secret_key"),
+	// 	TokenLookup: "cookie:jwt", // クッキーからJWTを取得
+	// }))
+	// エンドポイントの例
+	// func secureEndpoint(c echo.Context) error {
+	// 	user := c.Get("user").(*jwt.Token)
+	// 	claims := user.Claims.(jwt.MapClaims)
+	// 	userID := claims["user_id"].(string) // ユーザーIDの取得
+	// 	return c.String(http.StatusOK, "Access granted for user ID: "+userID)
+	// }
+
 	return nil
 }

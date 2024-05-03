@@ -56,7 +56,7 @@ func createJWT(userID string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// トークンに署名を付与
-	jws, _ := token.SignedString([]byte("SECRET_KEY"))
+	jws, _ := token.SignedString([]byte("your_secret_key"))
 
 	return jws
 }
