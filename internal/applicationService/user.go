@@ -17,6 +17,7 @@ import (
 
 type UserApplicationService interface {
 	Create(context.Context, *request.CreateUser) (*data.User, error)
+	Login(ctx context.Context, loginInput *request.Login) (*data.User, error)
 }
 
 type userApplicationService struct {
@@ -76,6 +77,30 @@ func (userApplicationService *userApplicationService) Create(ctx context.Context
 		Email:     createdUser.Email,
 		CreatedAt: createdUser.CreatedAt,
 		UpdatedAt: createdUser.UpdatedAt,
+	}, err
+}
+
+func (userApplicationService *userApplicationService) Login(ctx context.Context, loginInput *request.Login) (*data.User, error) {
+	extractedUser, err := userApplicationService.userRepository.GetByEmail(ctx, loginInput.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	userPassword := append([]byte(loginInput.Password), extractedUser.Salt...)
+
+	// パスワード比較
+	err = bcrypt.CompareHashAndPassword(extractedUser.HashedPassword, userPassword)
+	if err != nil {
+		logger.Logger.Error("An error occurred while comparing password", zap.Error(err))
+		return nil, err
+	}
+
+	return &data.User{
+		ID:        extractedUser.ID,
+		UserName:  extractedUser.UserName,
+		Email:     extractedUser.Email,
+		CreatedAt: extractedUser.CreatedAt,
+		UpdatedAt: extractedUser.UpdatedAt,
 	}, err
 }
 
