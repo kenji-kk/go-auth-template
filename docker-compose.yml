@@ -11,6 +11,8 @@ services:
       - ./:/app/api/
     networks:
       - go-auth-template
+    depends_on:
+      - mysql
   mysql:
     build: ./docker/mysql/
     ports:
@@ -21,6 +23,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     restart: always
+    tty: true
     networks:
       - go-auth-template
 networks:
