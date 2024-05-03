@@ -15,6 +15,7 @@ import (
 
 type UserHandler interface {
 	Create(echo.Context) error
+	Login(c echo.Context) error
 }
 
 type userHandler struct {
@@ -58,4 +59,23 @@ func createJWT(userID string) string {
 	jws, _ := token.SignedString([]byte("SECRET_KEY"))
 
 	return jws
+}
+
+func (userHandler *userHandler) Login(c echo.Context) error {
+	ctx := context.Background()
+	requestLogin := new(request.Login)
+	if err := utils.ReadRequest(c, requestLogin); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	loginUser, err := userHandler.userApplicationService.Login(ctx, requestLogin)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	jws := createJWT(loginUser.ID.String())
+
+	utils.WriteCookie(c, cookie.JWSCookieName, jws, 1)
+
+	return c.JSON(http.StatusOK, loginUser)
 }
