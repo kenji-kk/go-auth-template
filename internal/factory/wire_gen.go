@@ -4,13 +4,13 @@
 //go:build !wireinject
 // +build !wireinject
 
-package injection
+package factory
 
 import (
+	"github.com/kenji-kk/go-auth-template/internal/applicationService"
 	"github.com/kenji-kk/go-auth-template/internal/handler"
 	"github.com/kenji-kk/go-auth-template/internal/infra"
 	"github.com/kenji-kk/go-auth-template/internal/repository"
-	"github.com/kenji-kk/go-auth-template/internal/usecase"
 )
 
 // Injectors from wire.go:
@@ -18,8 +18,8 @@ import (
 func InitializeRootHandlers() handler.RootHandlers {
 	db := infra.NewMysql()
 	userRepository := repository.NewUserRepository(db)
-	userUsecase := usecase.NewUserUsecase(userRepository)
-	userHandler := handler.NewUserHandler(userUsecase)
+	userApplicationService := applicationService.NewUserApplicationService(userRepository)
+	userHandler := handler.NewUserHandler(userApplicationService)
 	rootHandlers := handler.NewRootHandlers(userHandler)
 	return rootHandlers
 }

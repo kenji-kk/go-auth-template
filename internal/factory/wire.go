@@ -1,13 +1,13 @@
 //go:build wireinject
 // +build wireinject
 
-package injection
+package factory
 
 import (
+	"github.com/kenji-kk/go-auth-template/internal/applicationService"
 	"github.com/kenji-kk/go-auth-template/internal/handler"
 	"github.com/kenji-kk/go-auth-template/internal/infra"
 	"github.com/kenji-kk/go-auth-template/internal/repository"
-	"github.com/kenji-kk/go-auth-template/internal/usecase"
 
 	"github.com/google/wire"
 )
@@ -19,7 +19,7 @@ func InitializeRootHandlers() handler.RootHandlers {
 		handler.NewUserHandler,
 
 		// usecase
-		usecase.NewUserUsecase,
+		applicationService.NewUserApplicationService,
 
 		// repository
 		repository.NewUserRepository,

@@ -1,4 +1,4 @@
-package usecase
+package applicationService
 
 import (
 	"context"
@@ -15,19 +15,19 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserUsecase interface {
+type UserApplicationService interface {
 	Create(context.Context, *request.CreateUser) (*data.User, error)
 }
 
-type userUsecase struct {
+type userApplicationService struct {
 	userRepository repository.UserRepository
 }
 
-func NewUserUsecase(userRepository repository.UserRepository) UserUsecase {
-	return &userUsecase{userRepository}
+func NewUserApplicationService(userRepository repository.UserRepository) UserApplicationService {
+	return &userApplicationService{userRepository}
 }
 
-func (userUsecase *userUsecase) Create(ctx context.Context, createInput *request.CreateUser) (*data.User, error) {
+func (userApplicationService *userApplicationService) Create(ctx context.Context, createInput *request.CreateUser) (*data.User, error) {
 	uuid := uuid.New()
 
 	salt, err := GenerateSalt()
@@ -64,7 +64,7 @@ func (userUsecase *userUsecase) Create(ctx context.Context, createInput *request
 		return nil, err
 	}
 
-	createdUser, err := userUsecase.userRepository.Create(ctx, userModel)
+	createdUser, err := userApplicationService.userRepository.Create(ctx, userModel)
 	if err != nil {
 		logger.Logger.Error("An error occurred while userUsecase.userRepository.CreateUser", zap.Error(err))
 		return nil, err

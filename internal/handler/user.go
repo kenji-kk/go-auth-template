@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/kenji-kk/go-auth-template/internal/applicationService"
 	"github.com/kenji-kk/go-auth-template/internal/const/http/cookie"
 	"github.com/kenji-kk/go-auth-template/internal/dto/request"
-	"github.com/kenji-kk/go-auth-template/internal/usecase"
 	"github.com/kenji-kk/go-auth-template/pkg/utils"
 	"github.com/labstack/echo/v4"
 )
@@ -18,11 +18,11 @@ type UserHandler interface {
 }
 
 type userHandler struct {
-	userUsecase usecase.UserUsecase
+	userApplicationService applicationService.UserApplicationService
 }
 
-func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
-	return &userHandler{userUsecase}
+func NewUserHandler(userApplicationService applicationService.UserApplicationService) UserHandler {
+	return &userHandler{userApplicationService}
 }
 
 func (userHandler *userHandler) Create(c echo.Context) error {
@@ -32,7 +32,7 @@ func (userHandler *userHandler) Create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	createdUser, err := userHandler.userUsecase.Create(ctx, requestCreateUser)
+	createdUser, err := userHandler.userApplicationService.Create(ctx, requestCreateUser)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}

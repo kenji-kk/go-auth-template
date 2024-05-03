@@ -4,8 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	"github.com/kenji-kk/go-auth-template/internal/factory"
 	"github.com/kenji-kk/go-auth-template/internal/handler"
-	"github.com/kenji-kk/go-auth-template/internal/injection"
 	"github.com/kenji-kk/go-auth-template/pkg/logger"
 )
 
@@ -19,7 +19,7 @@ func NewServer() *Server {
 
 func (s *Server) Run() error {
 	// rootHandlers生成
-	rootHandlers := injection.InitializeRootHandlers()
+	rootHandlers := factory.InitializeRootHandlers()
 
 	s.MapHandler(&rootHandlers)
 
